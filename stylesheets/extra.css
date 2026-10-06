@@ -1,0 +1,16 @@
+/* ターミナルの画面を黒地で表示する */
+.terminal.highlight,
+.terminal.highlight pre,
+.terminal.highlight code {
+  background-color: #1e1e1e;
+  color: #e6e6e6;
+}
+
+.terminal.highlight code span {
+  color: #e6e6e6;
+}
+
+/* プロンプトと入力を明るく */
+.terminal.highlight code span.gp {
+  color: #7ee787;
+}

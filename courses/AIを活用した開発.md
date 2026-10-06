@@ -179,7 +179,7 @@ rclone config
 
 `rclone config` を実行すると、次のように聞かれます。入力する箇所だけ示します。
 
-```
+```{ .console .terminal }
 e) Edit existing remote
 n) New remote
 d) Delete remote

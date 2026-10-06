@@ -36,6 +36,7 @@ jobs:
           cp -r courses site-src/
           cp -r forms site-src/
           cp -r images site-src/
+          cp -r stylesheets site-src/
 
       - name: Build site
         run: mkdocs build
