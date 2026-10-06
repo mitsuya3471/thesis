@@ -177,16 +177,51 @@ winget install Rclone.Rclone
 rclone config
 ```
 
-対話形式で聞かれるので、次のように答えます。
+`rclone config` を実行すると、次のように聞かれます。入力する箇所だけ示します。
 
-| 質問 | 答え |
-| --- | --- |
-| 新しい接続を作るか | `n`（new） |
-| 名前 | `gdrive` など好きな名前 |
-| 種類 | `drive`（Google Drive） |
-| client_id / client_secret | 空のままEnter |
-| scope | `1`（フルアクセス） |
-| 残りの質問 | Enterで既定のまま |
+```
+e) Edit existing remote
+n) New remote
+d) Delete remote
+q) Quit config
+e/n/d/q> n                      ← 新しい接続を作る
+
+Enter name for new remote.
+name> gdrive                    ← 好きな名前
+
+Option Storage.
+Type of storage to configure.
+ 1 / 1Fichier
+   \ (fichier)
+   （…50件以上並ぶので、Google Drive の番号を探す…）
+24 / Google Drive
+   \ (drive)
+Storage> drive                  ← 番号でも名前でも可
+
+Option client_id.
+Google Application Client Id
+Enter a value. Press Enter to leave empty.
+client_id>                      ← 何も入れずEnter
+
+Option client_secret.
+client_secret>                  ← 何も入れずEnter
+
+Option scope.
+ 1 / Full access all files, excluding Application Data Folder.
+   \ (drive)
+ 2 / Read-only access to file metadata and file contents.
+   \ (drive.readonly)
+scope> 1                        ← 読み書きしたいので1
+
+Option service_account_file.
+service_account_file>           ← 何も入れずEnter
+
+Edit advanced config?
+y/n> n
+
+Use web browser to automatically authenticate rclone with remote?
+y/n> y                          ← ブラウザが開く
+```
 
 最後にブラウザが開くので、自分のGoogleアカウントで許可します。以降は認証なしで使えます。
 
@@ -213,8 +248,6 @@ rclone config delete gdrive         # 設定そのものを消す
 ```
 
 自分のPCなら、残しておいて構いません。
-
-段落や表を細かく編集したい場合は、Apps Script を使います。Googleのサーバー上で動くJavaScriptで、`DocumentApp` から見出しや表を操作できます。
 
 ## 使うときの注意
 
