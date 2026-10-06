@@ -43,7 +43,7 @@
 
 | 内容 | 対応する回 | リンク |
 | --- | --- | --- |
-| Gradio・HTTPサーバ・cloudflared — 操作画面を付けて公開する | 第3回 開発環境 | [Colabで開く](https://colab.research.google.com/github/yusukem99/thesis/blob/main/notebooks/gradio-cloudflared.ipynb) |
+| Gradio・HTTPサーバ・cloudflared — 操作画面を付けて公開する | 第3回 開発環境 | [Colabで開く](https://colab.research.google.com/github/mitsuya3471/thesis/blob/main/notebooks/gradio-cloudflared.ipynb) |
 
 ## 提出物
 
