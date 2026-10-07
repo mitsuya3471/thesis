@@ -258,3 +258,61 @@ AIが書いたコードは、まだ検証していない下書きです。
 - 動かして確かめる。見た目が動いていても、不具合や穴があることがあります
 
 研究発表では、どこを自分で直したかを説明してもらいます。
+
+## 困ったときは公式ドキュメントを確かめる
+
+エラーやバグの原因を調べるとき、インターネットで検索することがあります。しかし、ネット上には信頼できる情報とそうでない情報が混在しています。正しい情報を見つけるためには、公式ドキュメントを参照することが重要です。
+
+調べるときは、次の順で進めます。
+
+```mermaid
+flowchart TD
+    E["エラーが出た"] --> S["検索して情報を見つける"]
+    S --> B["個人のブログやQ&Aサイト<br/>とりあえず動く方法が見つかる"]
+    B --> Q{"なぜ動くのか説明できるか"}
+    Q -- いいえ --> O["公式ドキュメントや man で<br/>設定項目の意味を確かめる"]
+    O --> U["理解したうえで設定する"]
+    Q -- はい --> U
+```
+
+たとえば、SSHでサーバに接続できないとき、インターネットで検索すると、個人のブログに次のような記事が見つかるかもしれません。
+
+yoshikiのブログ 2024/10/10
+
+サーバーに接続できなかったが、次のように書いたら接続できるようになった
+
+```bash
+Host yoshiki.com
+  HostName 1.1.1.1
+  User yoshiki
+  IdentityFile ~/.ssh/yoshiki
+```
+
+もちろん、目下の問題を解決するためには有用な情報です。しかし、この情報をむやみに信じて設定を変更すると、セキュリティ上の問題が発生する可能性もあります。また、正しく動き始めたとしても、その理由がわからないため、同じ問題が再発する可能性があります。
+
+さらに学びを深めるためには、公式ドキュメントを参照することが重要です。たとえば、SSHの設定については、OpenSSHの公式ドキュメントを参照するとよいでしょう。
+
+OpenSSHの公式ドキュメント
+
+https://man.openbsd.org/ssh_config
+
+たとえば、`IdentityFile`ディレクティブについては、次のように説明されています。
+
+```bash
+IdentityFile
+Specifies a file from which the user's ECDSA, authenticator-hosted ECDSA, Ed25519, authenticator-hosted Ed25519 or RSA authentication identity is read. You can also specify a public key file to use the corresponding private key that is loaded in ssh-agent(1) when the private key file is not present locally. The default is ~/.ssh/id_rsa, ~/.ssh/id_ecdsa, ~/.ssh/id_ecdsa_sk, ~/.ssh/id_ed25519 and ~/.ssh/id_ed25519_sk. Additionally, any identities represented by the authentication agent will be used for authentication unless IdentitiesOnly is set. If no certificates have been explicitly specified by CertificateFile, ssh(1) will try to load certificate information from the filename obtained by appending -cert.pub to the path of a specified IdentityFile.
+Arguments to IdentityFile may use the tilde syntax to refer to a user's home directory or the tokens described in the TOKENS section. Alternately an argument of none may be used to indicate no identity files should be loaded.
+
+It is possible to have multiple identity files specified in configuration files; all these identities will be tried in sequence. Multiple IdentityFile directives will add to the list of identities tried (this behaviour differs from that of other configuration directives).
+
+IdentityFile may be used in conjunction with IdentitiesOnly to select which identities in an agent are offered during authentication. IdentityFile may also be used in conjunction with CertificateFile in order to provide any certificate also needed for authentication with the identity.
+```
+
+とりあえずの問題解決には、個人のブログなどの情報も有用ですが、もう一歩踏み込んで学ぶためには、公式ドキュメントを参照することが重要です。
+
+また、linuxには`man`というコマンドがあり、コマンドの使い方や設定ファイルの書式などを確認することができます。たとえば、`ssh_config`の設定ファイルの書式を確認するには、次のようにコマンドを実行します。
+
+```
+man ssh_config
+```
+
