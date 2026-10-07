@@ -8,6 +8,18 @@
 - Cursor — AIを前提に作られたエディタ（VSCodeベース）。プロジェクト全体を理解して、コードの生成や修正ができます。
 - Claude / ChatGPT など — チャットで相談しながらコードを書いてもらいます。
 
+### 学生認証で Copilot Pro を使う
+
+申請は [GitHub Education](https://github.com/settings/education/benefits) から行います。次の準備が欠けていると却下されます。
+
+1. [2段階認証](https://github.com/settings/security)を有効にする
+2. [プロフィール](https://github.com/settings/profile)の Name に、学生証と同じ氏名をローマ字で入れる
+3. [請求先情報](https://github.com/settings/billing/payment_information)に同じ氏名と住所を入れる。支払い方法の登録は要りません
+4. いったんログアウトして、ログインし直す
+5. 申請フォームのカメラボタンから、学生証をその場で撮る
+
+学生証が日本語だけなら、氏名と学校名（Japan Electronics College）を英語で書いた紙を並べて撮ります。画像ファイルをアップロードすると却下されます。
+
 ## 頼み方でスコープを絞る
 
 うまくいかない最大の原因は、頼み方が漠然としていることです。予算で店を探すサイトを作って、とだけ頼むと、AIは数百行のコードと長い解説を一度に返してきます。しかも、自分が見たこともない道具で書かれていることがあります。動いても読めず、直せません。
