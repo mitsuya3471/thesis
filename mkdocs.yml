@@ -59,3 +59,5 @@ nav:
   - 中間発表: courses/中間発表.md
   - 卒業論文の執筆: courses/卒業論文の執筆.md
   - 研究発表: courses/研究発表.md
+  - 付録:
+      - Apacheの設定: courses/付録_Apacheの設定.md
