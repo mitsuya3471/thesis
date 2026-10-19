@@ -62,5 +62,7 @@ nav:
   - 付録:
       - SSHの接続: courses/付録_SSHの接続.md
       - Apacheの設定: courses/付録_Apacheの設定.md
+      - Cloudflare Tunnel で一時的に公開する: courses/付録_Cloudflare_Tunnel.md
+      - GitHub Pages で公開する: courses/付録_GitHub_Pages.md
       - ターミナルで操作する: courses/付録_ターミナルで操作する.md
       - ブラウザでのログインとトークン: courses/付録_ブラウザでのログインとトークン.md
