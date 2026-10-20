@@ -64,7 +64,9 @@ nav:
       - Apacheの設定: courses/付録_Apacheの設定.md
       - Cloudflare Tunnel で一時的に公開する: courses/付録_Cloudflare_Tunnel.md
       - GitHub Pages で公開する: courses/付録_GitHub_Pages.md
-      - ターミナルで操作する: courses/付録_ターミナルで操作する.md
+      - GitHub CLI（gh）: courses/付録_gh.md
+      - Googleドライブを操作する（rclone）: courses/付録_rclone.md
+      - AWS CLI（aws）: courses/付録_AWS_CLI.md
       - ブラウザでのログインとトークン: courses/付録_ブラウザでのログインとトークン.md
       - GitHub の学生認証: courses/付録_学生認証.md
       - Mermaid で図を描く: courses/付録_Mermaid.md

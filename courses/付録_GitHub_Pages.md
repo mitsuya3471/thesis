@@ -40,7 +40,7 @@ flowchart LR
 
 ## コマンドで公開する
 
-リポジトリのフォルダで、次を実行します。ブラウザの手順2〜4と同じです。`gh` の準備は [付録：ターミナルで操作する](付録_ターミナルで操作する.md) にあります。
+リポジトリのフォルダで、次を実行します。ブラウザの手順2〜4と同じです。`gh` の準備は [付録：GitHub CLI](付録_gh.md) にあります。
 
 ```powershell
 gh api -X POST repos/{owner}/{repo}/pages -f "source[branch]=main" -f "source[path]=/docs"
