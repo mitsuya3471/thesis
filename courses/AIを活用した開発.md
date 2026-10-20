@@ -4,23 +4,9 @@
 
 ## 主なツール
 
-- GitHub Copilot — VSCodeに組み込んで使えるAIコーディング補助。書いている途中のコードを提案してくれます。GitHubアカウントでサインインすれば無料で使えます（補完は月2000回まで）。学生認証を通すと Copilot Student になり、補完の上限がなくなります。どちらもモデルは自動で選ばれ、自分では選べません。
+- GitHub Copilot — VSCodeに組み込んで使えるAIコーディング補助。書いている途中のコードを提案してくれます。GitHubアカウントでサインインすれば無料で使えます（補完は月2000回まで）。[学生認証](付録_学生認証.md)を通すと Copilot Student になり、補完の上限がなくなります。どちらもモデルは自動で選ばれ、自分では選べません。
 - Cursor — AIを前提に作られたエディタ（VSCodeベース）。プロジェクト全体を理解して、コードの生成や修正ができます。
 - Claude / ChatGPT など — チャットで相談しながらコードを書いてもらいます。
-
-### 学生認証で Copilot Student を使う
-
-申請は [GitHub Education](https://github.com/settings/education/benefits) から行います。次の準備が欠けていると却下されます。
-
-1. [2段階認証](https://github.com/settings/security)を有効にする
-2. [プロフィール](https://github.com/settings/profile)の Name に、学生証と同じ氏名をローマ字で入れる
-3. [請求先情報](https://github.com/settings/billing/payment_information)に同じ氏名と住所を入れる。支払い方法の登録は要りません
-4. いったんログアウトして、ログインし直す
-5. 申請フォームのカメラボタンから、学生証をその場で撮る
-
-学生証が日本語だけなら、氏名と学校名（Japan Electronics College）を英語で書いた紙を並べて撮ります。画像ファイルをアップロードすると却下されます。
-
-認証が通ると、72時間後から使えるようになります。GitHub Pro も無料になり、非公開のリポジトリからでも [GitHub Pages](付録_GitHub_Pages.md) でページを公開できます。
 
 ## 頼み方でスコープを絞る
 
