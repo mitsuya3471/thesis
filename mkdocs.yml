@@ -70,3 +70,4 @@ nav:
       - ブラウザでのログインとトークン: courses/付録_ブラウザでのログインとトークン.md
       - GitHub の学生認証: courses/付録_学生認証.md
       - Mermaid で図を描く: courses/付録_Mermaid.md
+      - three.js で立体を動かす: courses/付録_threejs.md
