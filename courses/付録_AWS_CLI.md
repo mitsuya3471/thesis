@@ -83,4 +83,4 @@ Attempting to open the login page for `ap-northeast-1` in your default browser.
 
 ![請求情報へのアクセスを有効にする](../images/aws_billing_iam_access.png)
 
-作成後に表示されるサインインURL・ユーザー名・パスワードは、Classroomの限定公開コメントで教員に送ります。リポジトリやグループのチャットには書きません。制作が終わったら、このユーザーを削除します。
+作成後に表示されるサインインURL・ユーザー名・パスワードは、メールで教員に送ります。制作が終わったら、このユーザーを削除します。
