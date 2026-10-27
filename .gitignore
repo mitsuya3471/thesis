@@ -1,6 +1,9 @@
 # 過去学生の論文など、Gitに含めない参考資料（scripts/fetch-reference.sh で取得）
 reference/
 
+# 学生の制作リポジトリ（非公開のものを含むので、Gitに含めない）
+students/
+
 # Office一時ファイル・OSゴミ
 ~$*
 .DS_Store
