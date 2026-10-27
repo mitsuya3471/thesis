@@ -76,10 +76,11 @@ Attempting to open the login page for `ap-northeast-1` in your default browser.
 
 | ポリシー | 目的 |
 | --- | --- |
-| `ReadOnlyAccess` | 設定を見る。変更や削除はできない |
-| `AWSBillingReadOnlyAccess` | 料金と請求を見る |
+| `ReadOnlyAccess` | 設定と料金を見る。変更や削除はできない |
 | `SignInLocalDevelopmentAccess` | `aws login` で使う |
 
-料金を見せるには、ルートユーザーで右上のアカウント名から「アカウント」を開き、「IAM ユーザーおよびロールによる請求情報へのアクセス」を有効にします。
+料金を見せるには、ルートユーザーで右上のアカウント名から「アカウント」を開きます。ページの下のほうにある次の枠で「編集」を押し、チェックを入れて「更新」を押します。
+
+![請求情報へのアクセスを有効にする](../images/aws_billing_iam_access.png)
 
 作成後に表示されるサインインURL・ユーザー名・パスワードは、Classroomの限定公開コメントで教員に送ります。リポジトリやグループのチャットには書きません。制作が終わったら、このユーザーを削除します。
