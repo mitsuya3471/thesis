@@ -69,3 +69,17 @@ Attempting to open the login page for `ap-northeast-1` in your default browser.
 
 - AWS CLI のバージョン 2.32.0 以降が必要です
 - IAMユーザでログインする場合は、そのユーザに `SignInLocalDevelopmentAccess` というポリシーを付けておきます
+
+## 監査用のIAMユーザーを作る
+
+教員が構成と料金を確かめられるように、読み取り専用のIAMユーザーを作ります。手順は「IAMユーザーを作る」と同じで、付けるポリシーだけが違います。
+
+| ポリシー | 目的 |
+| --- | --- |
+| `ReadOnlyAccess` | 設定を見る。変更や削除はできない |
+| `AWSBillingReadOnlyAccess` | 料金と請求を見る |
+| `SignInLocalDevelopmentAccess` | `aws login` で使う |
+
+料金を見せるには、ルートユーザーで右上のアカウント名から「アカウント」を開き、「IAM ユーザーおよびロールによる請求情報へのアクセス」を有効にします。
+
+作成後に表示されるサインインURL・ユーザー名・パスワードは、Classroomの限定公開コメントで教員に送ります。リポジトリやグループのチャットには書きません。制作が終わったら、このユーザーを削除します。
