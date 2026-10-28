@@ -34,12 +34,3 @@ three.js のコードは、次の5つでできています。
 
 デモでは、形は円筒（`CylinderGeometry`）で、材質には絵柄を描いた画像を貼っています。
 
-## エージェントに頼む
-
-デモのファイルを `#fetch` で読ませて頼みます。
-
-```
-#fetch https://mitsuya3471.github.io/thesis/courses/demo/threejs_reel.html
-これをもとに、今のページにこのスロットを組み込んでください。
-店名は今の HTML のまま表示してください。
-```
