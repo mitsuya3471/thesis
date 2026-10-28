@@ -2,20 +2,24 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>リールの例</title>
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js" } }
   </script>
   <style>
-    body { margin: 0; display: flex; align-items: center; justify-content: center; gap: 24px; min-height: 100vh; background: #2b2d2e; color: #f5efdf; font-family: sans-serif; }
-    button { font-size: 18px; padding: 10px 24px; }
-    #result { font-size: 40px; min-width: 1.2em; margin: 0; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #15161a; color: #f5efdf; font-family: sans-serif; }
+    canvas { display: block; width: 100%; height: calc(100% - 64px); }
+    .panel { height: 64px; display: flex; align-items: center; justify-content: center; gap: 20px; }
+    button { font-size: 18px; font-weight: bold; padding: 8px 32px; border: 0; border-radius: 999px; background: #e0b040; color: #2a1d05; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: default; }
+    #result { font-size: 24px; min-width: 9em; margin: 0; }
   </style>
 </head>
 <body>
-  <canvas id="reel" width="300" height="300"></canvas>
-  <div>
-    <button id="spin">回す</button>
+  <canvas></canvas>
+  <div class="panel">
+    <button>回す</button>
     <p id="result"></p>
   </div>
 
@@ -23,69 +27,217 @@
     import * as THREE from "three";
 
     // 1. 絵柄の帯を canvas に描き、円筒に貼る画像（テクスチャ）にする
-    const symbols = ["丼", "麺", "酒", "串", "魚", "餃", "珈", "甘", "七", "飯"];
+    const symbols = ["丼", "麺", "酒", "串", "魚", "餃", "甘", "七"];
+    const colors = ["#e85d3f", "#f0a830", "#4f8fd8", "#b5653a", "#3fa7a0", "#8a6fd1", "#e06fa0", "#d9332b"];
+    const cellW = 160, cellH = 240;
     const strip = document.createElement("canvas");
-    strip.width = 128 * symbols.length;
-    strip.height = 128;
+    strip.width = cellW * symbols.length;
+    strip.height = cellH;
     const ctx = strip.getContext("2d");
-    ctx.fillStyle = "#f5efdf";
+    ctx.fillStyle = "#f7f1e1";
     ctx.fillRect(0, 0, strip.width, strip.height);
-    ctx.fillStyle = "#28251f";
-    ctx.font = "96px serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     symbols.forEach((s, i) => {
+      ctx.fillStyle = "#d8cfb8";
+      ctx.fillRect(cellW * i, 0, 3, cellH);  // 絵柄の境目の線
       ctx.save();
-      ctx.translate(128 * i + 64, 64);
+      ctx.translate(cellW * i + cellW / 2, cellH / 2);
       ctx.rotate(Math.PI / 2);      // 円筒に貼ると90度倒れるので、先に回しておく
-      ctx.fillText(s, 0, 0);
+      ctx.fillStyle = colors[i];
+      ctx.beginPath();
+      ctx.arc(0, 0, 66, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 84px serif";
+      ctx.fillText(s, 0, 4);
       ctx.restore();
     });
 
     // 2. シーン・カメラ・レンダラー
+    const canvas = document.querySelector("canvas");
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(devicePixelRatio);
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#55585a");
+    scene.background = new THREE.Color("#15161a");
     const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-    camera.position.z = 7;
-    const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector("#reel"), antialias: true });
-    scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-    const light = new THREE.DirectionalLight(0xffffff, 2);
-    light.position.set(2, 3, 5);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x332211, 1.2));
+    const light = new THREE.DirectionalLight(0xffffff, 2.5);
+    light.position.set(3, 4, 6);
     scene.add(light);
 
-    // 3. メッシュ：円筒（形）に絵柄（材質）を貼り、軸を横に倒す
-    const geometry = new THREE.CylinderGeometry(1.5, 1.5, 1.6, 64, 1, true);
+    // 3. メッシュ：円筒（形）に絵柄（材質）を貼り、軸を横に倒して3本並べる
+    const geometry = new THREE.CylinderGeometry(1.2, 1.2, 1.4, 64, 1, true);
     geometry.rotateZ(Math.PI / 2);
     const texture = new THREE.CanvasTexture(strip);
     texture.colorSpace = THREE.SRGBColorSpace;
-    const material = new THREE.MeshStandardMaterial({ map: texture });
-    const reel = new THREE.Mesh(geometry, material);
-    scene.add(reel);
+    texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    const material = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.5 });
 
-    // 4. 止める角度：i 番目の絵柄が正面に来る角度
     const step = (Math.PI * 2) / symbols.length;
-    const angleOf = (i) => step * (i + 0.5);
-    reel.rotation.x = angleOf(0);
-
-    let from = 0, to = 0, start = 0, duration = 2000, target = 0;
-    document.querySelector("#spin").addEventListener("click", () => {
-      target = Math.floor(Math.random() * symbols.length);
-      from = reel.rotation.x;
-      const rest = (angleOf(target) - from) % (Math.PI * 2);
-      to = from + Math.PI * 2 * 3 + (rest + Math.PI * 2) % (Math.PI * 2);  // 3周してから止める
-      start = performance.now();
+    const angleOf = (i) => step * (i + 0.5);  // i 番目の絵柄が正面に来る角度
+    const reels = [-1.55, 0, 1.55].map((x, n) => {
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = x;
+      mesh.rotation.x = angleOf(n * 3);
+      scene.add(mesh);
+      return { mesh, from: 0, to: 0, start: 0, duration: 0, target: 0, stopped: true };
     });
 
-    // 5. アニメーションループ：毎フレーム角度を更新して描き直す
+    // 4. 筐体：リールのまわりに枠・仕切り・線・ランプを置く
+    const box = (w, h, d, x, y, z, mat) => {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+      mesh.position.set(x, y, z);
+      scene.add(mesh);
+    };
+    const frame = new THREE.MeshStandardMaterial({ color: "#7a1020", metalness: 0.5, roughness: 0.35 });
+    const dark = new THREE.MeshStandardMaterial({ color: "#111111" });
+    box(5.6, 0.6, 0.8, 0, 1.3, 1.0, frame);
+    box(5.6, 0.6, 0.8, 0, -1.3, 1.0, frame);
+    box(0.5, 3.2, 0.8, -2.55, 0, 1.0, frame);
+    box(0.5, 3.2, 0.8, 2.55, 0, 1.0, frame);
+    box(0.2, 2.0, 0.8, -0.775, 0, 0.9, dark);
+    box(0.2, 2.0, 0.8, 0.775, 0, 0.9, dark);
+    box(4.6, 0.03, 0.02, 0, 0, 1.25, new THREE.MeshBasicMaterial({ color: "#ff3040", transparent: true, opacity: 0.6 }));
+
+    const lamps = [];
+    const lampGeometry = new THREE.SphereGeometry(0.09, 16, 8);
+    for (let i = 0; i < 11; i++) {
+      for (const y of [1.3, -1.3]) {
+        const mat = new THREE.MeshStandardMaterial({ color: "#553300", emissive: "#ffb830" });
+        const lamp = new THREE.Mesh(lampGeometry, mat);
+        lamp.position.set(-2.5 + i * 0.5, y, 1.42);
+        scene.add(lamp);
+        lamps.push({ mat, i });
+      }
+    }
+
+    // 5. 当たりのときに降らせる紙吹雪（同じ形をたくさん描く InstancedMesh）
+    const confetti = new THREE.InstancedMesh(
+      new THREE.PlaneGeometry(0.12, 0.07),
+      new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }),
+      150
+    );
+    const pieces = [];
+    for (let i = 0; i < confetti.count; i++) {
+      confetti.setColorAt(i, new THREE.Color(colors[i % colors.length]));
+      pieces.push({ position: new THREE.Vector3(), speed: 0, rotation: new THREE.Euler() });
+    }
+    const dropPiece = (p, y) => {
+      p.position.set((Math.random() - 0.5) * 6, y, 1.6 + Math.random());
+      p.speed = 0.8 + Math.random();
+      p.rotation.set(Math.random() * 6, Math.random() * 6, 0);
+    };
+    confetti.visible = false;
+    confetti.frustumCulled = false;  // 動き回るので、画面外かどうかの判定をしない
+    scene.add(confetti);
+    const dummy = new THREE.Object3D();
+
+    // 6. 回す：止める絵柄を先に決め、そこで止まる角度を計算する
+    const button = document.querySelector("button");
+    const result = document.querySelector("#result");
+    let spinning = false, win = false;
+    button.addEventListener("click", () => {
+      spinning = true;
+      win = false;
+      confetti.visible = false;
+      button.disabled = true;
+      const now = performance.now();
+      const targets = reels.map(() => Math.floor(Math.random() * symbols.length));
+      const reach = targets[0] === targets[1];  // 左と中央がそろったら、右を長く回す
+      reels.forEach((r, n) => {
+        const late = reach && n === 2;
+        r.target = targets[n];
+        r.from = r.mesh.rotation.x;
+        const rest = (angleOf(r.target) - r.from) % (Math.PI * 2);
+        r.to = r.from + Math.PI * 2 * (3 + n * 2 + (late ? 4 : 0)) + (rest + Math.PI * 2) % (Math.PI * 2);
+        r.start = now;
+        r.duration = 1600 + n * 700 + (late ? 2000 : 0);
+        r.stopped = false;
+      });
+    });
+
+    const angleAt = (r, now) => {
+      const t = (now - r.start) / r.duration;
+      if (t < 1) return r.from + (r.to - r.from) * (1 - (1 - t) ** 3);  // だんだん遅くなる
+      const b = (now - r.start - r.duration) / 1000;
+      return r.to + 0.08 * Math.sin(b * 40) * Math.exp(-b * 12);  // 止まったときに少し揺れる
+    };
+
+    // マウスの位置に合わせて、カメラを少し動かす
+    const pointer = { x: 0, y: 0 };
+    addEventListener("pointermove", (e) => {
+      pointer.x = (e.clientX / innerWidth) * 2 - 1;
+      pointer.y = -((e.clientY / innerHeight) * 2 - 1);
+    });
+
+    // 画面の大きさが変わったら、筐体が全部入る距離にカメラを下げる
+    const resize = () => {
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      const tan = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      camera.position.z = 1.4 + Math.max(1.9 / tan, 3.4 / (tan * camera.aspect));
+      camera.updateProjectionMatrix();
+    };
+    addEventListener("resize", resize);
+    resize();
+
+    // 7. アニメーションループ：毎フレーム角度や光り方を更新して描き直す
+    let last = 0;
     renderer.setAnimationLoop((now) => {
-      if (start) {
-        const t = Math.min((now - start) / duration, 1);
-        reel.rotation.x = from + (to - from) * (1 - (1 - t) ** 3);  // だんだん遅くなる
-        if (t === 1) {
-          start = 0;
-          document.querySelector("#result").textContent = symbols[target];
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+
+      for (const r of reels) {
+        if (!r.start) continue;
+        r.mesh.rotation.x = angleAt(r, now);
+        if (now > r.start + r.duration) r.stopped = true;
+        if (now > r.start + r.duration + 500) {
+          r.mesh.rotation.x = r.to;
+          r.start = 0;
         }
       }
+
+      if (spinning) {
+        result.textContent = reels.map((r) => (r.stopped ? symbols[r.target] : "・")).join(" ");
+        if (reels.every((r) => r.stopped)) {
+          spinning = false;
+          button.disabled = false;
+          const [a, b, c] = reels.map((r) => r.target);
+          if (a === b && b === c) {
+            win = true;
+            result.textContent += "　当たり！";
+            confetti.visible = true;
+            pieces.forEach((p) => dropPiece(p, 2 + Math.random() * 3));
+          }
+        }
+      }
+
+      // ランプ：回っている間は流れるように、当たりのときは全部点滅する
+      for (const { mat, i } of lamps) {
+        if (win) mat.emissiveIntensity = (i + Math.floor(now / 150)) % 2 ? 3 : 0.2;
+        else if (spinning) mat.emissiveIntensity = (i + Math.floor(now / 80)) % 4 === 0 ? 3 : 0.3;
+        else mat.emissiveIntensity = 0.8 + 0.4 * Math.sin(now / 600 + i);
+      }
+
+      if (confetti.visible) {
+        pieces.forEach((p, i) => {
+          p.position.y -= p.speed * dt;
+          p.rotation.x += dt * 5;
+          p.rotation.y += dt * 3;
+          if (p.position.y < -2.5) dropPiece(p, 2.5);
+          dummy.position.copy(p.position);
+          dummy.rotation.copy(p.rotation);
+          dummy.updateMatrix();
+          confetti.setMatrixAt(i, dummy.matrix);
+        });
+        confetti.instanceMatrix.needsUpdate = true;
+      }
+
+      camera.position.x += (pointer.x * 1.2 - camera.position.x) * 0.05;
+      camera.position.y += (pointer.y * 0.6 - camera.position.y) * 0.05;
+      camera.lookAt(0, 0, 0);
       renderer.render(scene, camera);
     });
   </script>

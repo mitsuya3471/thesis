@@ -4,7 +4,7 @@ three.js は、ブラウザで3Dの図形を描いて動かすためのライブ
 
 「回す」を押してみてください。
 
-<iframe src="../demo/threejs_reel.html" width="100%" height="340" style="border:0" loading="lazy"></iframe>
+<iframe src="../demo/threejs_reel.html" width="100%" height="420" style="border:0" loading="lazy"></iframe>
 
 このデモのファイルは [threejs_reel.html](demo/threejs_reel.html) です。
 
@@ -40,6 +40,6 @@ three.js のコードは、次の5つでできています。
 
 ```
 #fetch https://mitsuya3471.github.io/thesis/courses/demo/threejs_reel.html
-これをもとに、リールを3本にして、左・中央・右の順に止めてください。
+これをもとに、今のページにこのスロットを組み込んでください。
 店名は今の HTML のまま表示してください。
 ```
